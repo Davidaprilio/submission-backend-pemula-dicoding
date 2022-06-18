@@ -65,6 +65,7 @@ class BookModel {
   }
 
   update (book) {
+    book = BookModel.#build(book)
     return this.#data.map((item, index) => {
       mustBe(book, 'object', 'request type must be object')
       for (const key in book) {
@@ -132,7 +133,7 @@ class BookModel {
       const { field, type } = item
       // check is required
       if (item?.required) {
-        required(book[field], `Gagal menambahkan buku. Mohon isi ${item?.alias ?? field} buku`)
+        required(book[field], 'field is required', item?.alias ?? field)
       }
       // Tipe Harus Sama dengan type (jika ada field nya)
       // eslint-disable-next-line valid-typeof

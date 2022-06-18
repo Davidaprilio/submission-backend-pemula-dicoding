@@ -20,6 +20,9 @@ module.exports.add = (request, h) => {
     }).code(201)
   } catch (error) {
     if (error instanceof ValidationError) {
+      if (error.message === 'field is required') {
+        error.message = `Gagal menambahkan buku. Mohon isi ${error.name} buku`
+      }
       return h.response({
         status: 'fail',
         message: error.message
@@ -70,7 +73,7 @@ module.exports.update = (request, h) => {
     validate(data, {
       readPage: 'lt:pageCount' // less than pageCount
     }, {
-      'readPage.lt:pageCount': 'Gagal menambahkan buku. readPage tidak boleh lebih besar dari pageCount'
+      'readPage.lt:pageCount': 'Gagal memperbarui buku. readPage tidak boleh lebih besar dari pageCount'
     })
     const _book = new Book()
     const books = _book.where('id', '=', bookId).update(data)
@@ -90,6 +93,9 @@ module.exports.update = (request, h) => {
     }).code(200)
   } catch (error) {
     if (error instanceof ValidationError) {
+      if (error.message === 'field is required') {
+        error.message = `Gagal memperbarui buku. Mohon isi ${error.name} buku`
+      }
       return h.response({
         status: 'fail',
         message: error.message

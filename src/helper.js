@@ -75,9 +75,9 @@ module.exports.mustBe = (data, type, errMsg = null) => {
   return true
 }
 
-module.exports.required = (data, errMsg = null) => {
+module.exports.required = (data, errMsg = null, field) => {
   if (data === undefined || data === null) {
-    throw new ValidationError(errMsg ?? 'Data harus diisi')
+    throw new ValidationError(errMsg ?? 'Data harus diisi', field)
   }
   return true
 }

@@ -36,10 +36,12 @@ module.exports.add = (request, h) => {
 
 module.exports.get = (request, h) => {
   const _book = new Book()
-  const data = _book.pluck('id', 'name', 'publisher').get()
+  const books = _book.pluck('id', 'name', 'publisher').get()
   return h.response({
     status: 'success',
-    data
+    data: {
+      books
+    }
   }).code(200)
 }
 
@@ -55,7 +57,7 @@ module.exports.show = (request, h) => {
   }
   return h.response({
     status: 'success',
-    books: {
+    data: {
       book: books[0]
     }
   }).code(200)

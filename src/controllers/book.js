@@ -39,7 +39,24 @@ module.exports.get = (request, h) => {
   const data = _book.pluck('id', 'name', 'publisher').get()
   return h.response({
     status: 'success',
-    message: 'Buku berhasil ditampilkan',
     data
+  }).code(200)
+}
+
+module.exports.show = (request, h) => {
+  const bookId = request.params.bookId
+  const _book = new Book()
+  const books = _book.where('id', '=', bookId).get()
+  if (books.length === 0) {
+    return h.response({
+      status: 'fail',
+      message: 'Buku tidak ditemukan'
+    }).code(404)
+  }
+  return h.response({
+    status: 'success',
+    books: {
+      book: books[0]
+    }
   }).code(200)
 }

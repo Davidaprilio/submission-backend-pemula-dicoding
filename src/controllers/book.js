@@ -101,3 +101,19 @@ module.exports.update = (request, h) => {
     }
   }
 }
+
+module.exports.delete = (request, h) => {
+  const bookId = request.params.bookId
+  const _book = new Book()
+  const books = _book.where('id', '=', bookId).delete()
+  if (books.length === 0) {
+    return h.response({
+      status: 'fail',
+      message: 'Buku gagal dihapus. Id tidak ditemukan'
+    }).code(404)
+  }
+  return h.response({
+    status: 'success',
+    message: 'Buku berhasil dihapus'
+  }).code(200)
+}

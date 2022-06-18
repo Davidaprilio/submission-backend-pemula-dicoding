@@ -44,6 +44,7 @@ class BookModel {
   ]
 
   #data = []
+  #indexs = {}
 
   constructor () {
     this.#data = bookData
@@ -74,12 +75,23 @@ class BookModel {
     })
   }
 
+  delete () {
+    const deleted = []
+    for (const bookid in this.#indexs) {
+      const index = this.#indexs[bookid]
+      const book = bookData.splice(index, 1)
+      deleted.push(book)
+    }
+    return deleted
+  }
+
   get () {
     return this.#data
   }
 
   where (key, operation, value) {
-    this.#data = this.#data.filter((book) => {
+    this.#data = this.#data.filter((book, index) => {
+      this.#indexs[book.id] = index
       const field = book[key]
       switch (operation) {
         case '=':

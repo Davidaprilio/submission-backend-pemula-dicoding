@@ -52,12 +52,15 @@ class BookModel {
   static add (book) {
     book = this.#build(book)
     const dateStr = new Date().toISOString()
-    book.id = this.#generateId()
-    book.finished = false
-    book.insertedAt = dateStr
-    book.createdAt = dateStr
-    bookData.push(book)
-    return book
+    const data = {
+      id: this.#generateId(),
+      ...book,
+      finished: false,
+      insertedAt: dateStr,
+      updatedAt: dateStr
+    }
+    bookData.push(data)
+    return data
   }
 
   get () {

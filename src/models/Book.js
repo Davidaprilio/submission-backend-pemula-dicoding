@@ -65,7 +65,7 @@ class BookModel {
   }
 
   where (key, operation, value) {
-    this.#data = this.books.filter((book) => {
+    this.#data = this.#data.filter((book) => {
       const field = book[key]
       switch (operation) {
         case '=':

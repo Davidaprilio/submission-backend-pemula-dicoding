@@ -1,0 +1,27 @@
+{
+  "name": "submission-backend-pemula-dicoding",
+  "version": "1.0.0",
+  "description": "Submission Bookshelf API",
+  "main": "server.js",
+  "scripts": {
+    "start": "nodemon ./src/server.js",
+    "lint": "eslint ./"
+  },
+  "keywords": [
+    "dicoding",
+    "submission"
+  ],
+  "author": "David Aprilio",
+  "license": "ISC",
+  "devDependencies": {
+    "eslint": "^8.18.0",
+    "eslint-config-standard": "^17.0.0",
+    "eslint-plugin-import": "^2.26.0",
+    "eslint-plugin-n": "^15.2.3",
+    "eslint-plugin-promise": "^6.0.0"
+  },
+  "dependencies": {
+    "@hapi/hapi": "^20.2.2",
+    "nanoid": "^4.0.0"
+  }
+}

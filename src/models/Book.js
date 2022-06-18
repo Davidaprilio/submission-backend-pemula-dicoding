@@ -1,7 +1,7 @@
 const bookData = require('../data/bookData')
 const ValidationError = require('../ValidationError')
 const { nanoid } = require('nanoid')
-const { required } = require('../helper')
+const { required, mustBe } = require('../helper')
 
 class BookModel {
   static #schema = [
@@ -61,6 +61,17 @@ class BookModel {
     }
     bookData.push(data)
     return data
+  }
+
+  update (book) {
+    return this.#data.map((item, index) => {
+      mustBe(book, 'object', 'request type must be object')
+      for (const key in book) {
+        console.log(key, book[key])
+        this.#data[index][key] = book[key]
+      }
+      return this.#data[index]
+    })
   }
 
   get () {

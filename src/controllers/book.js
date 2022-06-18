@@ -60,3 +60,44 @@ module.exports.show = (request, h) => {
     }
   }).code(200)
 }
+
+module.exports.update = (request, h) => {
+  const bookId = request.params.bookId
+  const data = request.payload
+  try {
+    validate(data, {
+      readPage: 'lt:pageCount' // less than pageCount
+    }, {
+      'readPage.lt:pageCount': 'Gagal menambahkan buku. readPage tidak boleh lebih besar dari pageCount'
+    })
+    const _book = new Book()
+    const books = _book.where('id', '=', bookId).update(data)
+    console.log(books)
+    if (books.length === 0) {
+      return h.response({
+        status: 'fail',
+        message: 'Gagal memperbarui buku. Id tidak ditemukan'
+      }).code(404)
+    }
+    return h.response({
+      status: 'success',
+      message: 'Buku berhasil diperbarui',
+      data: {
+        book: books[0]
+      }
+    }).code(200)
+  } catch (error) {
+    if (error instanceof ValidationError) {
+      return h.response({
+        status: 'fail',
+        message: error.message
+      }).code(400)
+    } else {
+      console.error(error)
+      return h.response({
+        status: 'error',
+        message: 'Buku gagal diperbarui'
+      }).code(500)
+    }
+  }
+}

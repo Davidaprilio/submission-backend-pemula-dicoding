@@ -15,6 +15,11 @@ const routes = [
     method: 'GET',
     path: '/books/{bookId}',
     handler: books.show
+  },
+  {
+    method: 'PUT',
+    path: '/books/{bookId}',
+    handler: books.update
   }
 ]
 

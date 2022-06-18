@@ -4,7 +4,7 @@ const { nanoid } = require('nanoid')
 const { required } = require('../helper')
 
 class BookModel {
-  #schema = [
+  static #schema = [
     {
       field: 'name',
       type: 'string',
@@ -43,30 +43,61 @@ class BookModel {
     }
   ]
 
+  #data = []
+
   constructor () {
-    this.books = bookData
+    this.#data = bookData
   }
 
-  add (book) {
+  static add (book) {
     book = this.#build(book)
     const dateStr = new Date().toISOString()
     book.id = this.#generateId()
     book.finished = false
     book.insertedAt = dateStr
     book.createdAt = dateStr
-    this.books.push(book)
+    bookData.push(book)
     return book
   }
 
-  get (id = null) {
-    return this.books
+  get () {
+    return this.#data
   }
 
-  #generateId () {
+  where (key, operation, value) {
+    this.#data = this.books.filter((book) => {
+      const field = book[key]
+      switch (operation) {
+        case '=':
+          return field === value
+        case 'like':
+          return field.includes(value)
+        default:
+          throw new Error(`Operation ${operation} is not supported`)
+      }
+    })
+    return this
+  }
+
+  pluck (...keys) {
+    this.#data = this.#data.map(item => {
+      return keys.reduce((acc, key) => {
+        // eslint-disable-next-line no-prototype-builtins
+        if (!item.hasOwnProperty(key)) {
+          throw new Error(`field ${key} is not in item`)
+        }
+        acc[key] = item[key]
+        return acc
+      }, {})
+    })
+    return this
+  }
+
+  static #generateId () {
     return nanoid(15)
   }
 
-  #build (book) {
+  static #build (book) {
     if (typeof book !== 'object') {
       throw new ValidationError('request type must be object')
     }

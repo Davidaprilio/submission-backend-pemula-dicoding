@@ -1,7 +1,6 @@
 const { validate } = require('../helper')
-const BookModel = require('../models/Book')
+const Book = require('../models/Book')
 const ValidationError = require('../ValidationError')
-const Book = new BookModel()
 
 module.exports.add = (request, h) => {
   const data = request.payload
@@ -26,10 +25,21 @@ module.exports.add = (request, h) => {
         message: error.message
       }).code(400)
     } else {
+      console.error(error)
       return h.response({
         status: 'error',
         message: 'Buku gagal ditambahkan'
       }).code(500)
     }
   }
+}
+
+module.exports.get = (request, h) => {
+  const _book = new Book()
+  const data = _book.pluck('id', 'name', 'publisher').get()
+  return h.response({
+    status: 'success',
+    message: 'Buku berhasil ditampilkan',
+    data
+  }).code(200)
 }

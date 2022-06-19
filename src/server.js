@@ -16,6 +16,13 @@ const init = async () => {
 
   await server.start()
   console.log(`Server sedang berjalan di ${server.info.uri}`)
+  console.log('Submission Bookshelf API - Dicoding')
+  console.log('------------------------------------')
+  console.log('Nama: David Aprilio')
+  console.log('Username: david_april_14')
+  console.log('Email: david.14pril@gmail.com')
+  console.log('')
+  console.log('All test passed!. on nodejs v16.14.0')
 }
 
 init()

@@ -58,8 +58,6 @@ module.exports.get = (request, h) => {
   if (name !== null) {
     _book.where('name', 'like', name)
   }
-  console.log('Query', request.query, reading, finished, name)
-  // console.log('get', reading, finished, name, _book.get())
   const books = _book.pluck('id', 'name', 'publisher').get()
   return h.response({
     status: 'success',

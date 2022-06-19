@@ -6,10 +6,13 @@ module.exports.add = (request, h) => {
   const data = request.payload
   try {
     validate(data, {
-      readPage: 'lt:pageCount' // less than pageCount
+      readPage: 'lte:pageCount' // less than pageCount
     }, {
-      'readPage.lt:pageCount': 'Gagal menambahkan buku. readPage tidak boleh lebih besar dari pageCount'
+      'readPage.lte:pageCount': 'Gagal menambahkan buku. readPage tidak boleh lebih besar dari pageCount'
     })
+    if (data.readPage === data.pageCount) {
+      data.finished = true
+    }
     const book = Book.add(data)
     return h.response({
       status: 'success',
@@ -38,7 +41,25 @@ module.exports.add = (request, h) => {
 }
 
 module.exports.get = (request, h) => {
+  let {
+    reading = null,
+    finished = null,
+    name = null
+  } = request.query
   const _book = new Book()
+  if (reading !== null) {
+    reading = Boolean(parseInt(reading))
+    _book.where('reading', '=', reading)
+  }
+  if (finished !== null) {
+    finished = Boolean(parseInt(finished))
+    _book.where('finished', '=', finished)
+  }
+  if (name !== null) {
+    _book.where('name', 'like', name)
+  }
+  console.log('Query', request.query, reading, finished, name)
+  // console.log('get', reading, finished, name, _book.get())
   const books = _book.pluck('id', 'name', 'publisher').get()
   return h.response({
     status: 'success',
@@ -71,13 +92,12 @@ module.exports.update = (request, h) => {
   const data = request.payload
   try {
     validate(data, {
-      readPage: 'lt:pageCount' // less than pageCount
+      readPage: 'lte:pageCount' // less than pageCount
     }, {
-      'readPage.lt:pageCount': 'Gagal memperbarui buku. readPage tidak boleh lebih besar dari pageCount'
+      'readPage.lte:pageCount': 'Gagal memperbarui buku. readPage tidak boleh lebih besar dari pageCount'
     })
     const _book = new Book()
     const books = _book.where('id', '=', bookId).update(data)
-    console.log(books)
     if (books.length === 0) {
       return h.response({
         status: 'fail',

@@ -20,7 +20,7 @@ module.exports.validate = (data, validation, message = []) => {
         }
         if (role === 'required') {
           this.required(dataValue, msg)
-        } else if (role.startsWith('gt:') || role.startsWith('lt:') || role.startsWith('eq:')) {
+        } else if (role.startsWith('gt:') || role.startsWith('gte:') || role.startsWith('lt:') || role.startsWith('lte:') || role.startsWith('eq:')) {
           const [operator, two] = role.split(':')
           if (!two || !operator) {
             throw new Error(`Invalid validation role: ${role}`)
@@ -36,9 +36,17 @@ module.exports.validate = (data, validation, message = []) => {
             if (!(dataOne > dataTwo)) {
               throw new ValidationError(msg ?? `${key} harus lebih besar dari ${two}`)
             }
+          } else if (operator === 'gte') { // greater than or equal
+            if (!(dataOne >= dataTwo)) {
+              throw new ValidationError(msg ?? `${key} harus lebih besar atau sama dengan ${two}`)
+            }
           } else if (operator === 'lt') { // less than
             if (!(dataOne < dataTwo)) {
               throw new ValidationError(msg ?? `${key} harus lebih kecil dari ${two}`)
+            }
+          } else if (operator === 'lte') { // less than or equal
+            if (!(dataOne <= dataTwo)) {
+              throw new ValidationError(msg ?? `${key} harus lebih kecil atau sama dengan ${two}`)
             }
           } else if (operator === 'eq') { // equal
             if (!(dataOne === dataTwo)) {

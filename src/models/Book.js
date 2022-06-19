@@ -40,6 +40,11 @@ class BookModel {
       field: 'reading',
       type: 'boolean',
       default: false
+    },
+    {
+      field: 'finished',
+      type: 'boolean',
+      default: false
     }
   ]
 
@@ -56,7 +61,6 @@ class BookModel {
     const data = {
       id: this.#generateId(),
       ...book,
-      finished: false,
       insertedAt: dateStr,
       updatedAt: dateStr
     }
@@ -69,7 +73,6 @@ class BookModel {
     return this.#data.map((item, index) => {
       mustBe(book, 'object', 'request type must be object')
       for (const key in book) {
-        console.log(key, book[key])
         this.#data[index][key] = book[key]
       }
       return this.#data[index]

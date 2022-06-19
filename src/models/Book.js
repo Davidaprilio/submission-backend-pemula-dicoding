@@ -101,7 +101,7 @@ class BookModel {
         case '=':
           return field === value
         case 'like':
-          return field.includes(value)
+          return field.toLowerCase().includes(value.toLowerCase())
         default:
           throw new Error(`Operation ${operation} is not supported`)
       }
